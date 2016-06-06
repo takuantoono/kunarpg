@@ -34,5 +34,6 @@ var $plugins =
 {"name":"DeadOrAliveItem","status":true,"description":"make item/skill whose scope is both dead or alive.","parameters":{}},
 {"name":"AltMenuScreen3","status":true,"description":"Yet Another menu screen layout.","parameters":{"bgBitmapMenu":"black","bgBitmapItem":"black","bgBitmapSkill":"black","bgBitmapEquip":"black","bgBitmapStatus":"black","bgBitmapOptions":"black","bgBitmapFile":"black","bgBitmapGameEnd":"black","maxColsMenu":"4","commandRows":"2","isDisplayStatus":"1"}},
 {"name":"NewMenuScreen","status":true,"description":"Alternative menu screen layout.","parameters":{}},
-{"name":"AltMenuScreen","status":true,"description":"Alternative menu screen layout.","parameters":{}}
+{"name":"AltMenuScreen","status":true,"description":"Alternative menu screen layout.","parameters":{}},
+{"name":"RX_T_CallEvent_in_Map","status":true,"description":"マップ内に設定したイベントを他のイベントから呼び出すことができます。","parameters":{}}
 ];
