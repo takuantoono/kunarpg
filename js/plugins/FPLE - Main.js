@@ -592,15 +592,24 @@ MBS.FPLE.Map.prototype._applyTiles1 = function(scene) {
                 if (col === 0 && row === 0) continue;
 		
 		if($gameSwitches.value(9)){
+		if($gameSwitches.value(13)){
+                	material = this.getMaterial($dataMap.tilesetId, 4, 1, scene);
+		}
+		else{
                 	material = this.getMaterial($dataMap.tilesetId, 3, 6, scene);
+		}
 		}
 		else{
 		if($gameSwitches.value(14)){
                 	material = this.getMaterial($dataMap.tilesetId, 3, 7, scene);
 		}
 		else{
-			material = this.getMaterial($dataMap.tilesetId, 4, 3, scene);
-
+		if($gameSwitches.value(13)){
+                	material = this.getMaterial($dataMap.tilesetId, 4, 2, scene);
+		}
+		else{
+                	material = this.getMaterial($dataMap.tilesetId, 4, 3, scene);
+		}
 		}
 
 		}
