@@ -18,7 +18,7 @@ var num = $gameVariables.value(16) - $gameTroop.turnCount() - 1
 $gameVariables.setValue(16,num)
 var num = $gameVariables.value(20) + $gameTroop.turnCount() + 2
 $gameVariables.setValue(20,num)
-$gameSwitches.setValue(33,true)
+if(!$gameSwitches.value(25)) $gameSwitches.setValue(33,true)
 };
 
 

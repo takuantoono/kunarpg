@@ -131,7 +131,7 @@ this.drawIcon(11, 151, this.lineHeight()*2);
 
 
 if($gameSwitches.value(32)){
-if($gameVariables.value(17)<=50){
+if($gameVariables.value(17)<=10){
 this.changeTextColor(this.textColor(10));
 }
 else{
