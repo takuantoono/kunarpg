@@ -91,14 +91,5 @@
         this.y = this.fittingHeight(2);
     };
 
-Window_Status.prototype.drawBlock1 = function(y) {
-    this.drawActorName(this._actor, 6, y);
-    this.drawActorClass(this._actor, 192, y);
-    this.drawActorNickname(this._actor, 432, y);
-this.changeTextColor(this.systemColor());
-this.drawText("JP", 670, y, 20, 'right');
-this.resetTextColor();
-this.drawText(this._actor._jp[this._actor._classId], 690, y, 40, 'right');
-};
 
 })();

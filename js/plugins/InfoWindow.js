@@ -72,6 +72,11 @@ if($gameVariables.value(493)>=2){
 this.drawIcon(79, 0, 1);
 }
 this.changeTextColor(this.textColor(16));
+if(!$gameSwitches.value(8)){
+this.drawText("　　　視界" ,35,1);
+this.drawText($gameVariables.value(428) ,155,1);
+}
+else{
 if($gameVariables.value(430)==0){
 this.drawText("午前" ,35,1);
 }
@@ -88,7 +93,7 @@ this.drawText("深夜：視界" ,35,1);
 this.resetTextColor();
 this.drawText($gameVariables.value(428) ,155,1);
 }
-
+}
 
 
 if($gameVariables.value(15)<=0){

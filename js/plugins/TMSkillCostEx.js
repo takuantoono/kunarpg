@@ -135,6 +135,84 @@ Imported.TMSkillCostEx = true;
     return null;
   };
 
+  Game_BattlerBase.prototype.skillItemCostSv = function(skill) {
+
+    if (!this.isActor() && ignoreEnemyItemCost) {
+      return null;
+    }
+    if ($gameVariables.value(510) != 2) {
+      return null;
+    }
+    if (skill.meta.itemCostSv) {
+      var re = /(i|w|a)(\d+)\*(\d+)/i;
+      var match = re.exec(skill.meta.itemCostSv);
+      if (match) {
+	var weapon = $dataWeapons[this._equips[0]._itemId];
+	if (weapon != null) {
+	var dish = weapon.note.match(/<(?:arrow)>/i);
+	} else {
+	var dish = false
+	}
+	if (!dish){
+	return null;
+	}
+	else {
+        	var itemCost = {};
+        	var s = match[1].toUpperCase();
+        	if (s === 'I') {
+        	  itemCost.item = $dataItems[+match[2]];
+        	} else if (s === 'W') {
+        	  itemCost.item = $dataWeapons[+match[2]];
+        	} else {
+        	  itemCost.item = $dataArmors[+match[2]];
+        	}
+        	itemCost.num = +match[3];
+        	return itemCost;
+		}
+      }
+    }
+    return null;
+  };
+
+  Game_BattlerBase.prototype.skillItemCostAt = function(skill) {
+
+    if (!this.isActor() && ignoreEnemyItemCost) {
+      return null;
+    }
+    if ($gameVariables.value(510) != 1) {
+      return null;
+    }
+    if (skill.meta.itemCostAt) {
+      var re = /(i|w|a)(\d+)\*(\d+)/i;
+      var match = re.exec(skill.meta.itemCostAt);
+      if (match) {
+	var weapon = $dataWeapons[this._equips[0]._itemId];
+	if (weapon != null) {
+	var dish = weapon.note.match(/<(?:arrow)>/i);
+	} else {
+	var dish = false
+	}
+	if (!dish){
+	return null;
+	}
+	else {
+        	var itemCost = {};
+        	var s = match[1].toUpperCase();
+        	if (s === 'I') {
+        	  itemCost.item = $dataItems[+match[2]];
+        	} else if (s === 'W') {
+        	  itemCost.item = $dataWeapons[+match[2]];
+        	} else {
+        	  itemCost.item = $dataArmors[+match[2]];
+        	}
+        	itemCost.num = +match[3];
+        	return itemCost;
+		}
+      }
+    }
+    return null;
+  };
+
   Game_BattlerBase.prototype.skillExpCost = function(skill) {
     return !this.isEnemy() && skill.meta.expCost ? +skill.meta.expCost : 0;
   };
@@ -160,6 +238,8 @@ Imported.TMSkillCostEx = true;
   var _Game_BattleBase_canPaySkillCost = Game_BattlerBase.prototype.canPaySkillCost;
   Game_BattlerBase.prototype.canPaySkillCost = function(skill) {
     if (!this.canPaySkillHpCost(skill) ||
+	!this.canPaySkillItemCostSv(skill) ||
+	!this.canPaySkillItemCostAt(skill) ||
         !this.canPaySkillItemCost(skill) ||
         !this.canPaySkillExpCost(skill) ||
         !this.canPaySkillGoldCost(skill) ||
@@ -175,6 +255,16 @@ Imported.TMSkillCostEx = true;
   
   Game_BattlerBase.prototype.canPaySkillItemCost = function(skill) {
     var itemCost = this.skillItemCost(skill);
+    return !itemCost || $gameParty.numItems(itemCost.item) >= itemCost.num;
+  };
+
+  Game_BattlerBase.prototype.canPaySkillItemCostSv = function(skill) {
+    var itemCost = this.skillItemCostSv(skill);
+    return !itemCost || $gameParty.numItems(itemCost.item) >= itemCost.num;
+  };
+
+  Game_BattlerBase.prototype.canPaySkillItemCostAt = function(skill) {
+    var itemCost = this.skillItemCostAt(skill);
     return !itemCost || $gameParty.numItems(itemCost.item) >= itemCost.num;
   };
   
@@ -200,6 +290,14 @@ Imported.TMSkillCostEx = true;
     if (mpVNumberId > 0) $gameVariables.setValue(mpVNumberId, this._mp);
     this._hp -= Math.min(this.skillHpCost(skill), this._hp);
     var itemCost = this.skillItemCost(skill);
+    if (itemCost && this.isItemCostValid(itemCost.item)) {
+      $gameParty.loseItem(itemCost.item, itemCost.num, false)
+    }
+    var itemCost = this.skillItemCostSv(skill);
+    if (itemCost && this.isItemCostValid(itemCost.item)) {
+      $gameParty.loseItem(itemCost.item, itemCost.num, false)
+    }
+    var itemCost = this.skillItemCostAt(skill);
     if (itemCost && this.isItemCostValid(itemCost.item)) {
       $gameParty.loseItem(itemCost.item, itemCost.num, false)
     }

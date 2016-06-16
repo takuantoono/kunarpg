@@ -733,7 +733,8 @@ MBS.FPLE.Camera.prototype.constructor = MBS.FPLE.Camera;
         this.upVector = new BABYLON.Vector3(0, 1, 0);
         this.fov = 1;
         this.minZ = 0.1;
-        this.maxZ = MBS.FPLE.viewRadius;
+        //this.maxZ = MBS.FPLE.viewRadius;
+this.maxZ = $gameVariables.value(428)
         this.rotation.y = $gamePlayer.cameraAngle() * Math.PI / 180.0;
         this.rotation.z = Math.PI; // Look up
     };
@@ -943,7 +944,7 @@ else{
 else{
 if(!$gameSwitches.value(9)){
 if($gameSwitches.value(14)){
-        this._light.diffuse = new BABYLON.Color3.FromHexString("#FF3F00");
+        this._light.diffuse = new BABYLON.Color3.FromHexString("#FF8c00");
 }
 else{
         this._light.diffuse = new BABYLON.Color3.FromHexString(MBS.FPLE.lightColor);
@@ -958,7 +959,7 @@ else{
 }
 }
 }
-        this._light.range   = MBS.FPLE.viewRadius;
+        this._light.range   = $gameVariables.value(428)//MBS.FPLE.viewRadius;
     };
     
 MBS.FPLE.Scene.prototype._createLight = function() {
@@ -1002,6 +1003,7 @@ else{
         this._updateMap();
         this._updateCamera();
         this._updateLight();
+//this._updateLight1();
     };
     
     /**
@@ -1024,8 +1026,9 @@ else{
     MBS.FPLE.Scene.prototype._updateLight = function() {
         this._light.position.copyFrom(this._camera.position);
         if (this._light.range != MBS.FPLE.viewRadius)
-            this._light.range = MBS.FPLE.viewRadius;
+            this._light.range = $gameVariables.value(428)//MBS.FPLE.viewRadius;
     };
+
     
     /**
      * Terminates the scene process.

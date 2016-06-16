@@ -1,4 +1,4 @@
-//=============================================================================
+﻿//=============================================================================
 // Yanfly Engine Plugins - Shop Menu Core
 // YEP_ShopMenuCore.js
 //=============================================================================
@@ -1087,11 +1087,13 @@ Scene_Shop.prototype.createInfoWindow = function() {
 
 Scene_Shop.prototype.createDummyWindow = function() {
     var wy = this._commandWindow.y + this._commandWindow.height;
-    var wh = Graphics.boxHeight - wy;
+    var wh = Graphics.boxHeight - wy - 72;
     var ww = Math.ceil(eval(Yanfly.Param.ShopListWidth));
     this._dummyWindow = new Window_Base(0, wy, ww, wh);
     this.addWindow(this._dummyWindow);
 };
+
+
 
 Scene_Shop.prototype.createBuyWindow = function() {
     var wy = this._dummyWindow.y;
@@ -1144,7 +1146,7 @@ Scene_Shop.prototype.createStatusWindow = function() {
     var wx = this._dummyWindow.width;
     var wy = this._dummyWindow.y;
     var ww = Graphics.boxWidth - wx;
-    var wh = this._dummyWindow.height - this._goldWindow.height;
+    var wh = this._dummyWindow.height - this._goldWindow.height + 72;
     this._statusWindow = new Window_ShopStatus(wx, wy, ww, wh);
     this.addWindow(this._statusWindow);
     this._buyWindow.setStatusWindow(this._statusWindow);

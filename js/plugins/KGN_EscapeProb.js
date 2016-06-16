@@ -50,6 +50,7 @@ BattleManager.makeEscapeRatio = function() {
 	this._escapeRatio = Kiginu.Param.baseRatio * 
 		($gameParty.agility() * Kiginu.Param.toPartyAgi * ($gameVariables.value(484)+100)/100) / 
 		($gameTroop.agility() * Kiginu.Param.toEnemyAgi);
+alert(this._escapeRatio)
 	console.log(this._escapeRatio);//まあ残しといてもパフォーマンスに影響ないだろ
 };
 

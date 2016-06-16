@@ -1994,16 +1994,7 @@ BattleManager.startBattle = function() {
     this.displayStartMessages();
 };
 
-BattleManager.displayStartMessages = function() {
-    $gameTroop.enemyNames().forEach(function(name) {
-        $gameMessage.add(TextManager.emerge.format(name));
-    });
-    if (this._preemptive) {
-        $gameMessage.add(TextManager.preemptive.format($gameActors.actor(6)._name));
-    } else if (this._surprise) {
-        $gameMessage.add(TextManager.surprise.format($gameActors.actor(6)._name));
-    }
-};
+
 
 BattleManager.startInput = function() {
     this._phase = 'input';

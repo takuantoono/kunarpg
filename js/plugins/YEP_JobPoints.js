@@ -1,4 +1,4 @@
-//=============================================================================
+﻿//=============================================================================
 // Yanfly Engine Plugins - Job Points
 // YEP_JobPoints.js
 //=============================================================================
@@ -610,11 +610,11 @@ Window_Base.prototype.drawActorSimpleStatus = function(actor, wx, wy, ww) {
 
 Yanfly.JP.Window_Base_drawActorClass = Window_Base.prototype.drawActorClass;
 Window_Base.prototype.drawActorClass = function(actor, wx, wy, ww) {
-    ww = ww || 168;
+    ww = 138;
     Yanfly.JP.Window_Base_drawActorClass.call(this, actor, wx, wy, ww);
     if (!this._drawMenuJP) return;
     var classId = actor.currentClass().id;
-    this.drawActorJp(actor, classId, wx, wy, ww, 'right');
+    this.drawActorJp(actor, classId, wx+80, wy, ww, 'right');
 };
 
 Window_Base.prototype.drawActorJp = function(actor, id, wx, wy, ww, align) {

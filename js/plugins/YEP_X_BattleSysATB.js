@@ -1,4 +1,4 @@
-ï»¿//=============================================================================
+//=============================================================================
 // Yanfly Engine Plugins - Battle System - Active Turn Battle
 // YEP_X_BattleSysATB.js
 //=============================================================================
@@ -605,20 +605,20 @@ DataManager.isDatabaseLoaded = function() {
 DataManager.processATBNotetags1 = function(group) {
   var noteA1 = /<(?:ATB GAUGE):[ ](\d+)>/i;
   var noteA2 = /<(?:ATB GAUGE):[ ]([\+\-]\d+)>/i;
-  var noteA3 = /<(?:ATB GAUGE):[ ](\d+)([%ï¼…])>/i;
-  var noteA4 = /<(?:ATB GAUGE):[ ]([\+\-]\d+)([%ï¼…])>/i;
+  var noteA3 = /<(?:ATB GAUGE):[ ](\d+)([%“])>/i;
+  var noteA4 = /<(?:ATB GAUGE):[ ]([\+\-]\d+)([%“])>/i;
   var noteB1 = /<(?:ATB SPEED):[ ](\d+)>/i;
   var noteB2 = /<(?:ATB SPEED):[ ]([\+\-]\d+)>/i;
-  var noteB3 = /<(?:ATB SPEED):[ ](\d+)([%ï¼…])>/i;
-  var noteB4 = /<(?:ATB SPEED):[ ]([\+\-]\d+)([%ï¼…])>/i;
+  var noteB3 = /<(?:ATB SPEED):[ ](\d+)([%“])>/i;
+  var noteB4 = /<(?:ATB SPEED):[ ]([\+\-]\d+)([%“])>/i;
   var noteC1 = /<(?:ATB CHARGE):[ ](\d+)>/i;
   var noteC2 = /<(?:ATB CHARGE):[ ]([\+\-]\d+)>/i;
-  var noteC3 = /<(?:ATB CHARGE):[ ](\d+)([%ï¼…])>/i;
-  var noteC4 = /<(?:ATB CHARGE):[ ]([\+\-]\d+)([%ï¼…])>/i;
+  var noteC3 = /<(?:ATB CHARGE):[ ](\d+)([%“])>/i;
+  var noteC4 = /<(?:ATB CHARGE):[ ]([\+\-]\d+)([%“])>/i;
   var noteS1 = /<(?:AFTER ATB):[ ](\d+)>/i;
-  var noteS2 = /<(?:AFTER ATB):[ ](\d+)([%ï¼…])>/i;
+  var noteS2 = /<(?:AFTER ATB):[ ](\d+)([%“])>/i;
   var noteI1 = /<(?:ATB INTERRUPT)>/i;
-  var noteI2 = /<(?:ATB INTERRUPT):[ ](\d+)([%ï¼…])>/i;
+  var noteI2 = /<(?:ATB INTERRUPT):[ ](\d+)([%“])>/i;
   var noteI3 = /<(?:CANNOT ATB INTERRUPT)>/i;
   for (var n = 1; n < group.length; n++) {
     var obj = group[n];
@@ -714,9 +714,9 @@ DataManager.processATBNotetags1 = function(group) {
 
 DataManager.processATBNotetags2 = function(group) {
   var noteA1 = /<(?:ATB START):[ ]([\+\-]\d+)>/i;
-  var noteA2 = /<(?:ATB START):[ ]([\+\-]\d+)([%ï¼…])>/i;
+  var noteA2 = /<(?:ATB START):[ ]([\+\-]\d+)([%“])>/i;
   var noteB1 = /<(?:ATB TURN):[ ]([\+\-]\d+)>/i;
-  var noteB2 = /<(?:ATB TURN):[ ]([\+\-]\d+)([%ï¼…])>/i;
+  var noteB2 = /<(?:ATB TURN):[ ]([\+\-]\d+)([%“])>/i;
   for (var n = 1; n < group.length; n++) {
     var obj = group[n];
     var notedata = obj.note.split(/[\r\n]+/);
@@ -809,6 +809,7 @@ BattleManager.makeEscapeRatio = function() {
     if (this.isATB()) {
       this._escapeRatio = eval(Yanfly.Param.ATBEscapeRatio);
       this._escapeFailBoost = eval(Yanfly.Param.ATBEscapeBoost);
+
     } else {
       this._escapeFailBoost = 0.1;
       Yanfly.ATB.BattleManager_makeEscapeRatio.call(this);
@@ -1239,6 +1240,7 @@ BattleManager.processEscape = function() {
 BattleManager.processEscapeATB = function() {
   $gameParty.performEscape();
   SoundManager.playEscape();
+
   var success = this._preemptive ? true : (Math.random() < this._escapeRatio);
   if (success) {
       $gameParty.removeBattleStates();
@@ -1292,7 +1294,7 @@ BattleManager.actionATBCharge = function(actionArgs) {
     var targets = this.makeActionTargets(actionArgs[0]);
     if (targets.length < 1) return true;
     var cmd = actionArgs[1];
-    if (cmd.match(/([\+\-]\d+)([%ï¼…])/i)) {
+    if (cmd.match(/([\+\-]\d+)([%“])/i)) {
       var rate = parseFloat(RegExp.$1 * 0.01);
       for (var i = 0; i < targets.length; ++i) {
         var target = targets[i];
@@ -1315,7 +1317,7 @@ BattleManager.actionATBCharge = function(actionArgs) {
         target.setATBCharge(value);
         target.refresh();
       }
-    } else if (cmd.match(/(\d+)([%ï¼…])/i)) {
+    } else if (cmd.match(/(\d+)([%“])/i)) {
       var rate = parseFloat(RegExp.$1 * 0.01);
       for (var i = 0; i < targets.length; ++i) {
         var target = targets[i];
@@ -1358,7 +1360,7 @@ BattleManager.actionATBSpeed = function(actionArgs) {
     var targets = this.makeActionTargets(actionArgs[0]);
     if (targets.length < 1) return true;
     var cmd = actionArgs[1];
-    if (cmd.match(/([\+\-]\d+)([%ï¼…])/i)) {
+    if (cmd.match(/([\+\-]\d+)([%“])/i)) {
       var rate = parseFloat(RegExp.$1 * 0.01);
       var max = this.atbTarget();
       for (var i = 0; i < targets.length; ++i) {
@@ -1381,7 +1383,7 @@ BattleManager.actionATBSpeed = function(actionArgs) {
         target.setATBSpeed(value);
         target.refresh();
       }
-    } else if (cmd.match(/(\d+)([%ï¼…])/i)) {
+    } else if (cmd.match(/(\d+)([%“])/i)) {
       var rate = parseFloat(RegExp.$1 * 0.01);
       var max = this.atbTarget();
       for (var i = 0; i < targets.length; ++i) {

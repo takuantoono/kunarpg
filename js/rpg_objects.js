@@ -1176,6 +1176,7 @@ Game_Item.prototype.setObject = function(item) {
 Game_Item.prototype.setEquip = function(isWeapon, itemId) {
     this._dataClass = isWeapon ? 'weapon' : 'armor';
     this._itemId = itemId;
+
 };
 
 //-----------------------------------------------------------------------------
@@ -1942,6 +1943,7 @@ Game_Action.prototype.itemEffectLearnSkill = function(target, effect) {
 };
 
 Game_Action.prototype.itemEffectCommonEvent = function(target, effect) {
+$gameVariables.setValue(421,this.subject()._actorId)
 };
 
 Game_Action.prototype.makeSuccess = function(target) {
@@ -3618,6 +3620,18 @@ Game_Actor.prototype.changeEquip = function(slotId, item) {
             (!item || this.equipSlots()[slotId] === item.etypeId)) {
         this._equips[slotId].setObject(item);
         this.refresh();
+if($gameActors.actor(1).row()==1){
+$gameActors.actor(1).setRow(2)
+$gameActors.actor(1).setRow(1)
+}
+if($gameActors.actor(1).row()==2){
+$gameActors.actor(1).setRow(1)
+$gameActors.actor(1).setRow(2)
+}
+if($gameActors.actor(1).row()==3){
+$gameActors.actor(1).setRow(1)
+$gameActors.actor(1).setRow(3)
+}
     }
 };
 
@@ -5122,17 +5136,23 @@ Game_Party.prototype.hasDropItemDouble = function() {
 };
 
 Game_Party.prototype.ratePreemptive = function(troopAgi) {
-    var rate = this.agility() >= troopAgi ? 0.05 : 0.03;
+    //var rate = this.agility() >= troopAgi ? 0.05 : 0.03;
     if (this.hasRaisePreemptive()) {
-        rate *= 4;
+        var rate = this.agility() * 4 / troopAgi / 10
+    }
+    else {
+        var rate = this.agility() / troopAgi / 10
     }
     return rate;
 };
 
 Game_Party.prototype.rateSurprise = function(troopAgi) {
-    var rate = this.agility() >= troopAgi ? 0.03 : 0.05;
+    //var rate = this.agility() >= troopAgi ? 0.03 : 0.05;
     if (this.hasCancelSurprise()) {
-        rate = 0;
+        var rate = troopAgi / 5 / this.agility() / 10
+    }
+    else {
+        var rate = troopAgi / this.agility() / 10
     }
     return rate;
 };
@@ -10094,6 +10114,8 @@ Game_Interpreter.prototype.command301 = function() {
                 this._branch[this._indent] = n;
             }.bind(this));
             $gamePlayer.makeEncounterCount();
+    BattleManager._preemptive = (Math.random() < BattleManager.ratePreemptive());
+    BattleManager._surprise = (Math.random() < BattleManager.rateSurprise() && !BattleManager._preemptive);
             SceneManager.push(Scene_Battle);
         }
     }

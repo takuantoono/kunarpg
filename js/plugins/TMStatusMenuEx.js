@@ -353,12 +353,64 @@ Imported.TMStatusMenuEx = true;
                            this.lineHeight() / 2, this.gaugeBackColor());
     this.contents.paintOpacity = 255;
   };
-  
+ 
+    Game_Actor.prototype.ignoreEquipment = function(slotIndex) {
+        this._ignoreEquipIndex = slotIndex;
+    };
+
   Window_Status.prototype.drawParameters = function(x, y) {
-    this.drawParams(y);
-    this.drawXparams(y);
+    //this.drawParams(y);
+    y2 = y
+x -= 30
+       if (VictorEngine.Parameters.DualWield.SeparatedAttack) {
+            this.contents.fontSize += 2;
+            this._copy = JsonEx.makeDeepCopy(this._actor);
+            for (var i = 0; i < 7; i++) {
+                this.dualWieldParameters(x, y, i);
+		y += 3
+            }
+            this._copy = null;
+            this.resetFontSettings();
+        } else {
+            VictorEngine.DualWield.drawParameters.call(this, x, y)
+        }
+y = y2
+this.drawXparams(y);
   };
   
+Window_Status.prototype.dualWieldParameters = function(x, y, i) {
+        var dualwield = this._actor.isDualWield();
+        var y2 = y + (this.lineHeight() - 4) * i;
+        if (i < 2 && dualwield) {
+            var index = this._actor.isLeftHanded() ? i === 0 ? 2 : 1 : i + 1;
+            this._copy.ignoreEquipment(index);
+            var actor = this._copy;
+        } else {
+            var actor = this._actor;
+        }
+        this.drawDualWieldParameters(x, y2, i, actor);
+    }
+
+    Window_Status.prototype.drawDualWieldParameters = function(x, y, i, actor) {
+        var dualwield = this._actor.isDualWielding();
+        var paramId = i === 0 ? 2 : i + 1;
+        var right = VictorEngine.Parameters.DualWield.RightHandPrefix + ' ';
+        var left = VictorEngine.Parameters.DualWield.LeftHandPrefix + ' ';
+        var name = i === 0 ? right : i === 1 ? left : ''
+	this.drawParamBackGround(x, y, 180);
+        this.changeTextColor(this.systemColor());
+        this.drawText(name + TextManager.param(paramId), x, y, 160);
+        this.resetTextColor();
+        if (dualwield || i !== 1) {
+            this.drawText(actor.param(paramId), x + 120, y, 60, 'right');
+        } else {
+            this.drawText('---', x + 120, y, 60, 'right');
+        }
+	
+    }
+
+
+
   Window_Status.prototype.drawParams = function(y) {
     var x = paramNameX;
     var w = paramNameWidth;
@@ -378,6 +430,8 @@ Imported.TMStatusMenuEx = true;
     }
   };
   
+
+
   Window_Status.prototype.drawXparams = function(y) {
     var x = xparamNameX;
     var w = xparamNameWidth;
