@@ -3620,18 +3620,7 @@ Game_Actor.prototype.changeEquip = function(slotId, item) {
             (!item || this.equipSlots()[slotId] === item.etypeId)) {
         this._equips[slotId].setObject(item);
         this.refresh();
-if($gameActors.actor(1).row()==1){
-$gameActors.actor(1).setRow(2)
-$gameActors.actor(1).setRow(1)
-}
-if($gameActors.actor(1).row()==2){
-$gameActors.actor(1).setRow(1)
-$gameActors.actor(1).setRow(2)
-}
-if($gameActors.actor(1).row()==3){
-$gameActors.actor(1).setRow(1)
-$gameActors.actor(1).setRow(3)
-}
+
     }
 };
 
