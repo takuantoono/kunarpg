@@ -4,7 +4,7 @@
 // por Masked
 //=============================================================================
 //-----------------------------------------------------------------------------
-// Especifica??es do plugin (N?o modifique!)
+// Especificações do plugin (Não modifique!)
 // Plugin specifications (Do not modify!)
 //
 /*:
@@ -361,10 +361,9 @@ MBS.MobileDirPad = {};
 	};
 
 	Scene_Map.prototype.terminate = function() {
-		if (this.isMobileDevice()){
+		if (this.isMobileDevice())
 	    	this._dirPad.visible = this._aButton.visible = this._cButton.visible = false;
 		Scene_Map_terminate.apply(this, arguments);
-}
 	};
 
 	Scene_Map.prototype.processMapTouch = function() {

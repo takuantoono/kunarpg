@@ -3,6 +3,7 @@
 
 
 Game_Party.prototype.swapOrder = function(index1, index2) {
+if(!$gameParty.members()[index1].isStateAffected(1)&&!$gameParty.members()[index2].isStateAffected(1)){
     var temp = this._actors[index1];
     this._actors[index1] = this._actors[index2];
     this._actors[index2] = temp;
@@ -10,6 +11,7 @@ if(index1!=index2){
 this.formationState(index1);
 this.formationState(index2);
     $gamePlayer.refresh();
+}
 }
 };
 

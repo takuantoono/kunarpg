@@ -614,7 +614,7 @@ Window_Base.prototype.drawActorClass = function(actor, wx, wy, ww) {
     Yanfly.JP.Window_Base_drawActorClass.call(this, actor, wx, wy, ww);
     if (!this._drawMenuJP) return;
     var classId = actor.currentClass().id;
-    this.drawActorJp(actor, classId, wx+80, wy, ww, 'right');
+    this.drawActorJp(actor, classId, wx+45, wy, ww, 'right');
 };
 
 Window_Base.prototype.drawActorJp = function(actor, id, wx, wy, ww, align) {
