@@ -555,19 +555,19 @@ var UCHU_MobileOperation = {};
 			Scene_Map_createMessageWindows.call(this);
 			var oldStartMessage = this._messageWindow.startMessage;
 			var oldTerminateMessage = this._messageWindow.terminateMessage;
-			var scene = this;
-			
-			this._messageWindow.startMessage = function() {	
-				oldStartMessage.apply(this, arguments);
-				if($gameMessage.positionType()==2){
-					scene.hideUserInterface();
-				}
-			};
-			Window_Message.prototype.terminateMessage = function() {
-				oldTerminateMessage.apply(this, arguments);
-				Btn_hide=false;
-				setTimeout("Scene_Base.prototype.showUserInterface();", 200);
-			};
+			//var scene = this;
+			//
+			//this._messageWindow.startMessage = function() {	
+			//	oldStartMessage.apply(this, arguments);
+			//	if($gameMessage.positionType()==2){
+			//		scene.hideUserInterface();
+			//	}
+			//};
+			//Window_Message.prototype.terminateMessage = function() {
+			//	oldTerminateMessage.apply(this, arguments);
+			//	Btn_hide=false;
+			//	setTimeout("Scene_Base.prototype.showUserInterface();", 200);
+			//};
 		};
 		
 		var Scene_Battle_createMessageWindow = Scene_Battle.prototype.createMessageWindow;
@@ -575,18 +575,18 @@ var UCHU_MobileOperation = {};
 			Scene_Battle_createMessageWindow.call(this);
 			var oldStartMessage = this._messageWindow.startMessage;
 			var oldTerminateMessage = this._messageWindow.terminateMessage;
-			var scene = this;
-			this._messageWindow.startMessage = function() {
-				oldStartMessage.apply(this, arguments);
-				if($gameMessage.positionType()==2){
-					scene.hideUserInterface();
-				}
-			};
-			Window_Message.prototype.terminateMessage = function() {
-				oldTerminateMessage.apply(this, arguments);
-				Btn_hide=false;
-				setTimeout("Scene_Base.prototype.showUserInterface();", 200);
-			};
+			//var scene = this;
+			//this._messageWindow.startMessage = function() {
+			//	oldStartMessage.apply(this, arguments);
+			//	if($gameMessage.positionType()==2){
+			//		scene.hideUserInterface();
+			//	}
+			//};
+			//Window_Message.prototype.terminateMessage = function() {
+			//	oldTerminateMessage.apply(this, arguments);
+			//	Btn_hide=false;
+			//	setTimeout("Scene_Base.prototype.showUserInterface();", 200);
+			//};
 		};
 	}
 

@@ -53,8 +53,8 @@
     Window_Face.prototype.initialize = function() {
         var width  = 172;
         var height = Window_Base._faceHeight + this.standardPadding() * 2;
-        var x = 0//342;
-        var y = Graphics.boxHeight - this.fittingHeight(6) - height ;
+        var x = 342;
+        var y = Graphics.boxHeight - this.fittingHeight(5) - height;
         Window_Base.prototype.initialize.call(this, x, y, width, height);
         this.hide();
         this.loadImages();  // 非同期処理のためあらかじめロードしておく
