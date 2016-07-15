@@ -551,6 +551,44 @@ MBS.FPLE.Map = function() {
                 if (col === 0 && row === 0) continue;
 
                 material = this.getMaterial($dataMap.tilesetId, row, col, scene);
+		if($gameSwitches.value(8)&&$gameSwitches.value(9)){
+		if(row==1&&col==5){
+		material = this.getMaterial($dataMap.tilesetId, 4, 6, scene);
+		}
+		if(row==1&&col==7){
+		material = this.getMaterial($dataMap.tilesetId, 4, 7, scene);
+		}
+		if(row==2&&col==1){
+		material = this.getMaterial($dataMap.tilesetId, 5, 1, scene);
+		}
+		if(row==2&&col==2){
+		material = this.getMaterial($dataMap.tilesetId, 5, 2, scene);
+		}
+		if(row==2&&col==3){
+		material = this.getMaterial($dataMap.tilesetId, 5, 3, scene);
+		}
+		if(row==2&&col==4){
+		material = this.getMaterial($dataMap.tilesetId, 5, 4, scene);
+		}
+		if(row==2&&col==5){
+		material = this.getMaterial($dataMap.tilesetId, 5, 5, scene);
+		}
+		if(row==2&&col==6){
+		material = this.getMaterial($dataMap.tilesetId, 5, 6, scene);
+		}
+		if(row==2&&col==7){
+		material = this.getMaterial($dataMap.tilesetId, 5, 7, scene);
+		}
+		if(row==3&&col==1){
+		material = this.getMaterial($dataMap.tilesetId, 6, 1, scene);
+		}
+		if(row==3&&col==2){
+		material = this.getMaterial($dataMap.tilesetId, 6, 2, scene);
+		}
+		if(row==4&&col==4){
+		material = this.getMaterial($dataMap.tilesetId, 6, 3, scene);
+		}
+		}
                 var cubes = [];
 
                 // Floor
@@ -564,6 +602,8 @@ MBS.FPLE.Map = function() {
                     cube.position = new BABYLON.Vector3(-x, MBS.FPLE.wallHeight, y);
                     cubes.push(cube);
                 }
+                
+
                  
 
                 this._buildMesh(cubes, material);
@@ -590,7 +630,10 @@ MBS.FPLE.Map.prototype._applyTiles1 = function(scene) {
                 
                 // Do not draw the first tile at the first row
                 if (col === 0 && row === 0) continue;
-		
+		if(!$gameSwitches.value(8)){
+		material = this.getMaterial($dataMap.tilesetId, row, col, scene);
+		}
+		else{
 		if($gameSwitches.value(9)){
 		if($gameSwitches.value(13)){
                 	material = this.getMaterial($dataMap.tilesetId, 4, 1, scene);
@@ -600,10 +643,6 @@ MBS.FPLE.Map.prototype._applyTiles1 = function(scene) {
 		}
 		}
 		else{
-		if($gameSwitches.value(14)){
-                	material = this.getMaterial($dataMap.tilesetId, 3, 7, scene);
-		}
-		else{
 		if($gameSwitches.value(13)){
                 	material = this.getMaterial($dataMap.tilesetId, 4, 2, scene);
 		}
@@ -611,7 +650,6 @@ MBS.FPLE.Map.prototype._applyTiles1 = function(scene) {
                 	material = this.getMaterial($dataMap.tilesetId, 4, 3, scene);
 		}
 		}
-
 		}
                 var cubes = [];
 
@@ -619,11 +657,8 @@ MBS.FPLE.Map.prototype._applyTiles1 = function(scene) {
                 // Ceiling
                 //if ($gameMap.regionId(x, y) === MBS.FPLE.ceilRegion) {
                     cube = this._createCube('ceil' + x+ '-' + y, scene);
-//var chi = $gameVariables.value(496)
-// ceil = MBS.FPLE.ceilHeight 
-//var ceil = $gameVariables.value(497)
-//if(ceil==2) ceil = 5
-var ceil =1.3
+var ceil =1.98
+
                     cube.position = new BABYLON.Vector3(-x, ceil, y);
                     cubes.push(cube);
                 //}
@@ -698,7 +733,8 @@ MBS.FPLE.Camera.prototype.constructor = MBS.FPLE.Camera;
         this.upVector = new BABYLON.Vector3(0, 1, 0);
         this.fov = 1;
         this.minZ = 0.1;
-        this.maxZ = MBS.FPLE.viewRadius;
+        //this.maxZ = MBS.FPLE.viewRadius;
+this.maxZ = $gameVariables.value(428)
         this.rotation.y = $gamePlayer.cameraAngle() * Math.PI / 180.0;
         this.rotation.z = Math.PI; // Look up
     };
@@ -832,7 +868,8 @@ MBS.FPLE.Scene.prototype.constructor = MBS.FPLE.Scene;
 
         this._createMap();
         this._createCamera();
-        this._createLight();
+        if($gameSwitches.value(8)) this._createLight();
+this._createLight1();
     };
 
 	/**
@@ -891,8 +928,10 @@ MBS.FPLE.Scene.prototype.constructor = MBS.FPLE.Scene;
     /**
      * Creates the light for the scene.
      */
-    MBS.FPLE.Scene.prototype._createLight = function() {
-        this._light         = new BABYLON.PointLight("fpleLight", BABYLON.Vector3.Zero(), this);
+    MBS.FPLE.Scene.prototype._createLight1 = function() {
+var light1 = new BABYLON.PointLight("fpleLight", BABYLON.Vector3.Zero(), this);
+this._light = light1
+        //this._light         = new BABYLON.PointLight("fpleLight", BABYLON.Vector3.Zero(), this);
 
 if(!$gameSwitches.value(8)){
 if($gameSwitches.value(6)){
@@ -905,7 +944,41 @@ else{
 else{
 if(!$gameSwitches.value(9)){
 if($gameSwitches.value(14)){
-        this._light.diffuse = new BABYLON.Color3.FromHexString("#ff8c00");
+        this._light.diffuse = new BABYLON.Color3.FromHexString("#FF8c00");
+}
+else{
+        this._light.diffuse = new BABYLON.Color3.FromHexString(MBS.FPLE.lightColor);
+}
+}
+else{
+if($gameSwitches.value(6)){
+        this._light.diffuse = new BABYLON.Color3.FromHexString("#FF8000");
+}
+else{
+        this._light.diffuse = new BABYLON.Color3.FromHexString("#585858");
+}
+}
+}
+        this._light.range   = $gameVariables.value(428)//MBS.FPLE.viewRadius;
+    };
+    
+MBS.FPLE.Scene.prototype._createLight = function() {
+var light0 = new BABYLON.DirectionalLight("fpleLight", new BABYLON.Vector3(1, 10, 1), this);
+this._light = light0
+        //this._light         = new BABYLON.PointLight("fpleLight", BABYLON.Vector3.Zero(), this);
+
+if(!$gameSwitches.value(8)){
+if($gameSwitches.value(6)){
+        this._light.diffuse = new BABYLON.Color3.FromHexString("#FF8000");
+}
+else{
+        this._light.diffuse = new BABYLON.Color3.FromHexString(MBS.FPLE.lightColor);
+}
+}
+else{
+if(!$gameSwitches.value(9)){
+if($gameSwitches.value(14)){
+        this._light.diffuse = new BABYLON.Color3.FromHexString("#FF3F00");
 }
 else{
         this._light.diffuse = new BABYLON.Color3.FromHexString(MBS.FPLE.lightColor);
@@ -922,7 +995,7 @@ else{
 }
         this._light.range   = MBS.FPLE.viewRadius;
     };
-    
+
     /**
      * Updates the scene.
      */
@@ -930,6 +1003,7 @@ else{
         this._updateMap();
         this._updateCamera();
         this._updateLight();
+//this._updateLight1();
     };
     
     /**
@@ -952,8 +1026,9 @@ else{
     MBS.FPLE.Scene.prototype._updateLight = function() {
         this._light.position.copyFrom(this._camera.position);
         if (this._light.range != MBS.FPLE.viewRadius)
-            this._light.range = MBS.FPLE.viewRadius;
+            this._light.range = $gameVariables.value(428)//MBS.FPLE.viewRadius;
     };
+
     
     /**
      * Terminates the scene process.

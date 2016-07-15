@@ -1,4 +1,4 @@
-//=============================================================================
+﻿//=============================================================================
 // Yanfly Engine Plugins - Battle Engine Core
 // YEP_BattleEngineCore.js
 //=============================================================================
@@ -1381,7 +1381,7 @@ BattleManager.makeEscapeRatio = function() {
       this._escapeRatio = eval(Yanfly.Param.BECEscRatio);
       this._escapeFailBoost = eval(Yanfly.Param.BECEscFail);
     } else {
-      this._escapeFailBoost = 0.1;
+      this._escapeFailBoost = 0.05;
       Yanfly.BEC.BattleManager_makeEscapeRatio.call(this);
     }
 };
@@ -1409,9 +1409,9 @@ BattleManager.displayStartMessages = function() {
       });
     }
     if (this._preemptive && eval(Yanfly.Param.BECPreEmpText)) {
-        $gameMessage.add(TextManager.preemptive.format($gameParty.name()));
+        $gameMessage.add(TextManager.preemptive.format($gameActors.actor(6)._name));
     } else if (this._surprise && eval(Yanfly.Param.BECSurpText)) {
-        $gameMessage.add(TextManager.surprise.format($gameParty.name()));
+        $gameMessage.add(TextManager.surprise.format($gameActors.actor(6)._name));
     }
 };
 

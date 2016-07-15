@@ -1176,6 +1176,7 @@ Game_Item.prototype.setObject = function(item) {
 Game_Item.prototype.setEquip = function(isWeapon, itemId) {
     this._dataClass = isWeapon ? 'weapon' : 'armor';
     this._itemId = itemId;
+
 };
 
 //-----------------------------------------------------------------------------
@@ -1942,6 +1943,7 @@ Game_Action.prototype.itemEffectLearnSkill = function(target, effect) {
 };
 
 Game_Action.prototype.itemEffectCommonEvent = function(target, effect) {
+$gameVariables.setValue(421,this.subject()._actorId)
 };
 
 Game_Action.prototype.makeSuccess = function(target) {
@@ -3618,6 +3620,7 @@ Game_Actor.prototype.changeEquip = function(slotId, item) {
             (!item || this.equipSlots()[slotId] === item.etypeId)) {
         this._equips[slotId].setObject(item);
         this.refresh();
+
     }
 };
 
@@ -5122,17 +5125,23 @@ Game_Party.prototype.hasDropItemDouble = function() {
 };
 
 Game_Party.prototype.ratePreemptive = function(troopAgi) {
-    var rate = this.agility() >= troopAgi ? 0.05 : 0.03;
+    //var rate = this.agility() >= troopAgi ? 0.05 : 0.03;
     if (this.hasRaisePreemptive()) {
-        rate *= 4;
+        var rate = this.agility() * 4 / troopAgi / 10
+    }
+    else {
+        var rate = this.agility() / troopAgi / 10
     }
     return rate;
 };
 
 Game_Party.prototype.rateSurprise = function(troopAgi) {
-    var rate = this.agility() >= troopAgi ? 0.03 : 0.05;
+    //var rate = this.agility() >= troopAgi ? 0.03 : 0.05;
     if (this.hasCancelSurprise()) {
-        rate = 0;
+        var rate = troopAgi / 5 / this.agility() / 10
+    }
+    else {
+        var rate = troopAgi / this.agility() / 10
     }
     return rate;
 };
@@ -7592,14 +7601,24 @@ Game_Player.prototype.moveByInput = function() {
     if (!this.isMoving() && this.canMove()) {
         var direction = this.getInputDirection();
         if (direction > 0) {
+
             $gameTemp.clearDestination();
         } else if ($gameTemp.isDestinationValid()){
-            var x = $gameTemp.destinationX();
-            var y = $gameTemp.destinationY();
-            direction = this.findDirectionTo(x, y);
+        //    var x = $gameTemp.destinationX();
+        //    var y = $gameTemp.destinationY();
+        //    direction = this.findDirectionTo(x, y);
         }
-        if (direction > 0) {
-            this.executeMove(direction);
+        if (direction == 8) {
+            $gameSwitches.setValue(86,true)
+        }
+	if (direction == 2) {
+            $gameSwitches.setValue(85,true)
+        }
+        if (direction == 4) {
+            $gameSwitches.setValue(83,true)
+        }
+        if (direction == 6) {
+            $gameSwitches.setValue(84,true)
         }
     }
 };
@@ -10094,6 +10113,8 @@ Game_Interpreter.prototype.command301 = function() {
                 this._branch[this._indent] = n;
             }.bind(this));
             $gamePlayer.makeEncounterCount();
+    BattleManager._preemptive = (Math.random() < BattleManager.ratePreemptive());
+    BattleManager._surprise = (Math.random() < BattleManager.rateSurprise() && !BattleManager._preemptive);
             SceneManager.push(Scene_Battle);
         }
     }

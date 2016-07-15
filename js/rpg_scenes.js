@@ -1,4 +1,4 @@
-//=============================================================================
+﻿//=============================================================================
 // rpg_scenes.js
 //=============================================================================
 
@@ -513,7 +513,7 @@ Scene_Map.prototype.updateScene = function() {
         this.updateEncounter();
     }
     if (!SceneManager.isSceneChanging()) {
-        this.updateCallMenu();
+        //this.updateCallMenu();
     }
     if (!SceneManager.isSceneChanging()) {
         this.updateCallDebug();

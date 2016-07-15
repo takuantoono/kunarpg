@@ -227,6 +227,14 @@
     //
     // load bitmap that set in plugin parameter
     //
+(function() {
+  Scene_MenuBase.prototype.createBackground = function() {
+      this._backgroundSprite = new Sprite();
+      this._backgroundSprite.bitmap = ImageManager.loadPicture(bgBitmapMenu);
+      this.addChild(this._backgroundSprite);
+      this._backgroundSprite.setBlendColor([16, 16, 16, 128]);
+  };
+})();
     var _Scene_Menu_createBackground = Scene_Menu.prototype.createBackground;
     Scene_Menu.prototype.createBackground = function(){
         if(bgBitmapMenu){
@@ -344,7 +352,19 @@
             return;
         }
         // if background file is invalid, it does original process.
-        _Scene_File_createBackground.call(this);
+        _Scene_Row_createBackground.call(this);
+    };
+    var _Scene_EnemyBook_createBackground = Scene_EnemyBook.prototype.createBackground;
+    Scene_EnemyBook.prototype.createBackground = function(){
+        if(bgBitmapile){
+            this._backgroundSprite = new Sprite();
+            this._backgroundSprite.bitmap =
+             ImageManager.loadPicture("black");
+            this.addChild(this._backgroundSprite);
+            return;
+        }
+        // if background file is invalid, it does original process.
+        _Scene_EnemyBook_createBackground.call(this);
     };
 
     //

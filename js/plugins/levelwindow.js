@@ -1,10 +1,14 @@
 (function() {
 
-Window_Base.prototype.drawActorLevel = function(actor, x, y) {
-    this.changeTextColor(this.systemColor());
-    this.drawText(TextManager.levelA, x, y, 48);
-    this.resetTextColor();
-    this.drawText(actor.level, x + 24, y, 36, 'right');
+
+Window_Status.prototype.drawBlock1 = function(y) {
+    this.drawActorName(this._actor, 6, y);
+    this.drawActorClass(this._actor, 192, y);
+    this.drawActorNickname(this._actor, 432, y);
+this.changeTextColor(this.systemColor());
+this.drawText("JP", 670, y, 20, 'right');
+this.resetTextColor();
+this.drawText(this._actor._jp[this._actor._classId], 690, y, 40, 'right');
 };
 
 
@@ -12,13 +16,13 @@ var BattleManager_updateBattleEnd = BattleManager.updateBattleEnd;
 BattleManager.updateBattleEnd = function() {
 BattleManager_updateBattleEnd.call(this);
 
-var num = $gameVariables.value(15) - $gameTroop.turnCount() / 2
+var num = $gameVariables.value(15) - $gameTroop.turnCount() / 5
 $gameVariables.setValue(15,num)
-var num = $gameVariables.value(16) - $gameTroop.turnCount() - 1
+var num = $gameVariables.value(16) - $gameTroop.turnCount() / 2 - 1
 $gameVariables.setValue(16,num)
 var num = $gameVariables.value(20) + $gameTroop.turnCount() + 2
 $gameVariables.setValue(20,num)
-$gameSwitches.setValue(33,true)
+if(!$gameSwitches.value(25)) $gameSwitches.setValue(33,true)
 };
 
 
@@ -66,6 +70,13 @@ $gameVariables.setValue(id,item.name)
     }
 };
 
+Window_BattleStatus.prototype.numVisibleRows = function() {
+    return 5;
+};
+
+Window_ActorCommand.prototype.numVisibleRows = function() {
+    return 5;
+};
 
 
 })();

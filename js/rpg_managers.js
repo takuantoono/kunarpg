@@ -1,4 +1,4 @@
-//=============================================================================
+﻿//=============================================================================
 // rpg_managers.js
 //=============================================================================
 
@@ -722,8 +722,13 @@ ImageManager.loadParallax = function(filename, hue) {
 };
 
 ImageManager.loadPicture = function(filename, hue) {
+if ( filename.match(/3d/)) {
+    return this.loadBitmap('img/pictures/textures/', filename, hue, true);
+}else{
     return this.loadBitmap('img/pictures/', filename, hue, true);
+}
 };
+
 
 ImageManager.loadSvActor = function(filename, hue) {
     return this.loadBitmap('img/sv_actors/', filename, hue, false);
@@ -1995,9 +2000,6 @@ BattleManager.startBattle = function() {
 };
 
 BattleManager.displayStartMessages = function() {
-    $gameTroop.enemyNames().forEach(function(name) {
-        $gameMessage.add(TextManager.emerge.format(name));
-    });
     if (this._preemptive) {
         $gameMessage.add(TextManager.preemptive.format($gameActors.actor(6)._name));
     } else if (this._surprise) {

@@ -1,4 +1,4 @@
-//=============================================================================
+﻿//=============================================================================
 // Yanfly Engine Plugins - Row Formation
 // YEP_RowFormation.js
 //=============================================================================
@@ -1062,10 +1062,10 @@ Game_BattlerBase.prototype.refresh = function() {
 Yanfly.Row.Game_BattlerBase_states = Game_BattlerBase.prototype.states;
 Game_BattlerBase.prototype.states = function() {
     var array = Yanfly.Row.Game_BattlerBase_states.call(this);
-    if ($gameParty.inBattle()) {
+    //if ($gameParty.inBattle()) {
       this.addRowStates(array);
       this.sortRowStates(array);
-    }
+    //}
     return array;
 };
 
@@ -1114,11 +1114,12 @@ Game_BattlerBase.prototype.getRowStateData = function() {
 };
 
 Game_BattlerBase.prototype.meetRowStateCondition = function(stateId) {
-    if (!$gameParty.inBattle()) return false;
+    //if (!$gameParty.inBattle()) return false;
     if (this._checkingRowStateCondition) return false;
     var state = $dataStates[stateId];
     if (!state) return false;
     if (state.rowConditionEval === '') return true;
+
     return this.rowStateConditionEval(state);
 };
 
@@ -1145,7 +1146,7 @@ Game_BattlerBase.prototype.sortRowStates = function(array) {
 };
 
 Game_BattlerBase.prototype.isRowStateAffected = function(stateId) {
-    if (!$gameParty.inBattle()) return false;
+    //if (!$gameParty.inBattle()) return false;
     return this.rowStatesRaw().contains(stateId);
 };
 
@@ -1223,7 +1224,7 @@ Game_Battler.prototype.setRow = function(rowId) {
     this._row = rowId.clamp(1, Yanfly.Param.RowMaximum);
     var changed = currentRow !== this._row;
     if (changed) this.friendsUnit().clearBattleRowCache();
-    if ($gameParty.inBattle() && changed) BattleManager.requestRefreshRows();
+    if (changed) BattleManager.requestRefreshRows();
 };
 
 Game_Battler.prototype.alterRow = function(value) {
@@ -1234,7 +1235,7 @@ Game_Battler.prototype.alterRow = function(value) {
     this._row = this._row.clamp(1, Yanfly.Param.RowMaximum);
     var changed = currentRow !== this._row;
     if (changed) this.friendsUnit().clearBattleRowCache();
-    if ($gameParty.inBattle() && changed) BattleManager.requestRefreshRows();
+    if (changed) BattleManager.requestRefreshRows();
 };
 
 Game_Battler.prototype.targetRowEval = function(code, user, item) {
@@ -1251,7 +1252,7 @@ Game_Battler.prototype.targetRowEval = function(code, user, item) {
     eval(code);
     if (currentRow !== row) this.setRow(row);
     var changed = currentRow !== this._row;
-    if ($gameParty.inBattle() && changed) BattleManager.requestRefreshRows();
+    if (changed) BattleManager.requestRefreshRows();
 };
 
 Game_Battler.prototype.userRowEval = function(code, target, item) {
@@ -1269,7 +1270,7 @@ Game_Battler.prototype.userRowEval = function(code, target, item) {
     eval(code);
     if (currentRow !== row) this.setRow(row);
     var changed = currentRow !== this._row;
-    if ($gameParty.inBattle() && changed) BattleManager.requestRefreshRows();
+    if (changed) BattleManager.requestRefreshRows();
 };
 
 //=============================================================================
@@ -1340,7 +1341,7 @@ Yanfly.Row.Game_Action_apply = Game_Action.prototype.apply;
 Game_Action.prototype.apply = function(target) {
     if ($gameTroop.turnCount() <= 0) target._allowRowReposition = true;
     Yanfly.Row.Game_Action_apply.call(this, target);
-    if ($gameParty.inBattle() && this.item()) {
+    if (this.item()) {
       this.applyUserItemRowEffect(target);
     }
 };
@@ -1349,7 +1350,7 @@ Yanfly.Row.Game_Action_applyItemUserEffect =
     Game_Action.prototype.applyItemUserEffect;
 Game_Action.prototype.applyItemUserEffect = function(target) {
     Yanfly.Row.Game_Action_applyItemUserEffect.call(this, target);
-    if (!$gameParty.inBattle()) return;
+    //if (!$gameParty.inBattle()) return;
     if (!this.item()) return;
     this.applyItemRowEffect(target);
 };
@@ -1750,7 +1751,7 @@ Window_Base.prototype.drawSvActor = function(actor, x, y) {
 
 Yanfly.Row.Window_ItemList_isEnabled = Window_ItemList.prototype.isEnabled;
 Window_ItemList.prototype.isEnabled = function(item) {
-    if ($gameParty.inBattle()) return this.isRowEnabled(item);
+    return this.isRowEnabled(item);
     return Yanfly.Row.Window_ItemList_isEnabled.call(this, item);
 };
 
@@ -1789,6 +1790,7 @@ function Window_RowFormation() {
 
 Window_RowFormation.prototype = Object.create(Window_Selectable.prototype);
 Window_RowFormation.prototype.constructor = Window_RowFormation;
+
 
 Window_RowFormation.prototype.initialize = function(wy) {
     var ww = Graphics.boxWidth;
@@ -2036,13 +2038,7 @@ function Scene_Row() {
 Scene_Row.prototype = Object.create(Scene_MenuBase.prototype);
 Scene_Row.prototype.constructor = Scene_Row;
 
-Scene_Row.prototype.initialize = function() {
-    Scene_MenuBase.prototype.initialize.call(this);
-this._backgroundSprite = new Sprite();
-            this._backgroundSprite.bitmap =
-             ImageManager.loadPicture("black");
-            this.addChild(this._backgroundSprite);
-};
+
 
 Scene_Row.prototype.create = function() {
     Scene_MenuBase.prototype.create.call(this);

@@ -278,4 +278,36 @@
 		_Scene_Item_useItem.call(this);
 		if (this._invLimitWindow) this._invLimitWindow.refresh();
 	};
+
+Scene_Shop.prototype.doBuyItem = function(number) {
+    $gameParty.gainItem(this._item, number);
+if (this._invLimitWindow) this._invLimitWindow.refresh();
+};
+
+Scene_Shop.prototype.doSellItem = function(number) {
+    $gameParty.loseItem(this._item, number);
+if (this._invLimitWindow) this._invLimitWindow.refresh();
+};
+
+
+	var _Scene_Shop_create = Scene_Shop.prototype.create;
+	Scene_Shop.prototype.create = function() {
+		_Scene_Shop_create.call(this);
+		if (paramShowWindow)
+			this.createLimitWindow();
+	};
+
+	Scene_Shop.prototype.createLimitWindow = function() {
+		var wx = 0;
+		var ww = this._dummyWindow.width;
+		var wh = 72
+		var wy = this._dummyWindow.y + this._dummyWindow.height;
+		this._invLimitWindow = new Window_InventoryLimit(wx, wy, ww, wh);
+		this.addWindow(this._invLimitWindow);
+	};
+
+
+
+
+
 })();

@@ -1,4 +1,4 @@
-//=============================================================================
+﻿//=============================================================================
 // Yanfly Engine Plugins - Shop Menu Core
 // YEP_ShopMenuCore.js
 //=============================================================================
@@ -577,14 +577,14 @@ Window_ShopNumber.prototype.refresh = function() {
     this.contents.clear();
     this._index = 0;
     this.resetFontSettings();
-    this.drawItemName(this._item, 0, this.lineHeight(), this.contents.width);
+    this.drawItemName(this._item, 0, 0, this.contents.width);
     this.drawMultiplicationSign();
     this.drawNumber();
     this.drawTotalPrice();
 };
 
 Window_ShopNumber.prototype.itemY = function() {
-    return this.lineHeight() * 2;
+    return this.lineHeight() * 1;
 };
 
 Window_ShopNumber.prototype.drawTotalPrice = function() {
@@ -607,6 +607,10 @@ Window_ShopNumber.prototype.getTotalCurrency = function() {
       return $gameParty.gold();
     }
     return 0;
+};
+
+Window_ShopNumber.prototype.buttonY = function() {
+    return Math.round(this.priceY() + this.lineHeight() * 2);
 };
 
 Window_ShopNumber.prototype.drawTotalCost = function(ww, wy) {
@@ -1087,11 +1091,13 @@ Scene_Shop.prototype.createInfoWindow = function() {
 
 Scene_Shop.prototype.createDummyWindow = function() {
     var wy = this._commandWindow.y + this._commandWindow.height;
-    var wh = Graphics.boxHeight - wy;
+    var wh = Graphics.boxHeight - wy - 72;
     var ww = Math.ceil(eval(Yanfly.Param.ShopListWidth));
     this._dummyWindow = new Window_Base(0, wy, ww, wh);
     this.addWindow(this._dummyWindow);
 };
+
+
 
 Scene_Shop.prototype.createBuyWindow = function() {
     var wy = this._dummyWindow.y;
@@ -1144,7 +1150,7 @@ Scene_Shop.prototype.createStatusWindow = function() {
     var wx = this._dummyWindow.width;
     var wy = this._dummyWindow.y;
     var ww = Graphics.boxWidth - wx;
-    var wh = this._dummyWindow.height - this._goldWindow.height;
+    var wh = this._dummyWindow.height - this._goldWindow.height + 72;
     this._statusWindow = new Window_ShopStatus(wx, wy, ww, wh);
     this.addWindow(this._statusWindow);
     this._buyWindow.setStatusWindow(this._statusWindow);
@@ -1214,6 +1220,7 @@ Scene_Shop.prototype.createActorWindow = function() {
 };
 
 Scene_Shop.prototype.commandEquip = function() {  
+this._invLimitWindow.hide();
     this._actorWindow.activate();
     this._actorWindow.show();
     this._actorWindow.select(0);
@@ -1227,6 +1234,7 @@ Scene_Shop.prototype.onActorOk = function() {
 };
 
 Scene_Shop.prototype.onActorCancel = function() {
+this._invLimitWindow.show();
     this._actorWindow.hide();
     this._actorWindow.deselect();
     this._commandWindow.activate();
