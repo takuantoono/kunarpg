@@ -1,4 +1,4 @@
-//=============================================================================
+﻿//=============================================================================
 // Yanfly Engine Plugins - Battle Engine Core
 // YEP_BattleEngineCore.js
 //=============================================================================
@@ -11,7 +11,7 @@ Yanfly.BEC = Yanfly.BEC || {};
 
 //=============================================================================
  /*:
- * @plugindesc v1.36b Have more control over the flow of the battle system
+ * @plugindesc v1.35c Have more control over the flow of the battle system
  * with this plugin and alter various aspects to your liking.
  * @author Yanfly Engine Plugins
  *
@@ -648,24 +648,13 @@ Yanfly.BEC = Yanfly.BEC || {};
  * Changelog
  * ============================================================================
  *
- * Version 1.36b:
- * - Made an update for the battle background image snaps when there is no
- * battleback being used. This will prevent the player party and enemy troop
- * from appearing in the background snapshot when entering menus mid-battle.
- * - 'Death Break' action sequence now only triggers upon dead status and not
- * an 'or 0 HP' condition.
- * - Updated Forced Action sequencing for more efficiency.
- * - 'Action Times+' traits now work properly for DTB again.
- *
- * Verison 1.35d:
+ * Verison 1.35c:
  * - Scopes that target a dead ally will automatically target the first dead
  * ally now. Scopes that target all dead allies will lock onto the first dead
  * ally. This will hopefully provide less confusion amongst playing.
  * - Added anti-crash measure for sprite bitmaps.
  * - Added anti-crash measure for faux actions.
  * - Added anti-crash measure to prevent non-existant animations from playing.
- * - Added a check that prevents hidden battlers from appearing when using
- * certain action sequences.
  *
  * Version 1.34a:
  * - Fixed a bug where 'NOT FOCUS' targets were not including dead members.
@@ -1392,7 +1381,7 @@ BattleManager.makeEscapeRatio = function() {
       this._escapeRatio = eval(Yanfly.Param.BECEscRatio);
       this._escapeFailBoost = eval(Yanfly.Param.BECEscFail);
     } else {
-      this._escapeFailBoost = 0.1;
+      this._escapeFailBoost = 0.05;
       Yanfly.BEC.BattleManager_makeEscapeRatio.call(this);
     }
 };
@@ -1420,9 +1409,9 @@ BattleManager.displayStartMessages = function() {
       });
     }
     if (this._preemptive && eval(Yanfly.Param.BECPreEmpText)) {
-        $gameMessage.add(TextManager.preemptive.format($gameParty.name()));
+        $gameMessage.add(TextManager.preemptive.format($gameActors.actor(6)._name));
     } else if (this._surprise && eval(Yanfly.Param.BECSurpText)) {
-        $gameMessage.add(TextManager.surprise.format($gameParty.name()));
+        $gameMessage.add(TextManager.surprise.format($gameActors.actor(6)._name));
     }
 };
 
@@ -1623,38 +1612,8 @@ BattleManager.updateEvent = function() {
     return this.checkAbort();
 };
 
-BattleManager.queueForceAction = function(user, skillId, target) {
-    var param = [
-      user.isEnemy() ? 0 : 1,
-      user.isActor() ? user.actorId() : user.index(),
-      skillId,
-      target
-    ];
-    var command = {
-      code: 339,
-      indent: 0,
-      parameters: param
-    }
-    $gameTemp.forceActionQueue(command);
-    this.clearResults();
-    if (this.isTickBased()) this._phase = 'action';
-};
-
-BattleManager.clearResults = function() {
-  var group = this.allBattleMembers();
-  var length = group.length;
-  for (var i = 0; i < length; ++i) {
-    var member = group[i];
-    if (member) member.clearResult();
-  }
-  this._allTargets = [];
-  this._targets = [];
-  this._target = undefined;
-};
-
 Yanfly.BEC.BattleManager_forceAction = BattleManager.forceAction;
 BattleManager.forceAction = function(battler) {
-    if (this._subject) this._subject.clearResult();
     this.createForceActionFailSafes();
     this.savePreForceActionSettings();
     Yanfly.BEC.BattleManager_forceAction.call(this, battler);
@@ -1760,7 +1719,7 @@ BattleManager.invokeAction = function(subject, target) {
   } else {
     this.invokeNormalAction(subject, target);
   }
-  if (subject) subject.setLastTarget(target);
+  subject.setLastTarget(target);
   if (!eval(Yanfly.Param.BECOptSpeed)) this._logWindow.push('popBaseLine');
 };
 
@@ -1842,14 +1801,11 @@ BattleManager.createFinishActions = function() {
 
 Yanfly.BEC.BattleManager_endAction = BattleManager.endAction;
 BattleManager.endAction = function() {
-    if (this._subject) {
-      this._subject.onAllActionsEnd();
-    }
     if (this._processingForcedAction) {
-      this._subject.removeCurrentAction();
       this._phase = this._preForcePhase;
     }
     this._processingForcedAction = false;
+    if (this._subject) this._subject.onAllActionsEnd();
     if (this.loadPreForceActionSettings()) return;
     Yanfly.BEC.BattleManager_endAction.call(this);
 };
@@ -2040,7 +1996,7 @@ BattleManager.makeActionTargets = function(string) {
       var group = this._targets;
       for (var i = 0; i < group.length; ++i) {
         var target = group[i];
-        if (target && target.isAppeared()) targets.push(target);
+        if (target) targets.push(target);
       }
       return targets;
     }
@@ -2048,7 +2004,7 @@ BattleManager.makeActionTargets = function(string) {
       var group = $gameParty.aliveMembers();
       for (var i = 0; i < group.length; ++i) {
         var target = group[i];
-        if (target && target.isAppeared()) targets.push(target);
+        if (target) targets.push(target);
       }
       return targets;
     }
@@ -2056,7 +2012,7 @@ BattleManager.makeActionTargets = function(string) {
       var group = $gameParty.battleMembers();
       for (var i = 0; i < group.length; ++i) {
         var target = group[i];
-        if (target && target.isAppeared()) targets.push(target);
+        if (target) targets.push(target);
       }
       return targets;
     }
@@ -2072,9 +2028,7 @@ BattleManager.makeActionTargets = function(string) {
       var group = $gameParty.aliveMembers();
       for (var i = 0; i < group.length; ++i) {
         var target = group[i];
-        if (target && target !== this._subject && target.isAppeared()) {
-          targets.push(target);
-        }
+        if (target && target !== this._subject) targets.push(target);
       }
       return targets;
     }
@@ -2083,7 +2037,7 @@ BattleManager.makeActionTargets = function(string) {
       var group = $gameTroop.aliveMembers();
       for (var i = 0; i < group.length; ++i) {
         var target = group[i];
-        if (target && target.isAppeared()) targets.push(target);
+        if (target) targets.push(target);
       }
       return targets;
     }
@@ -2091,7 +2045,7 @@ BattleManager.makeActionTargets = function(string) {
       var group = $gameTroop.members();
       for (var i = 0; i < group.length; ++i) {
         var target = group[i];
-        if (target && target.isAppeared()) targets.push(target);
+        if (target) targets.push(target);
       }
       return targets;
     }
@@ -2108,25 +2062,23 @@ BattleManager.makeActionTargets = function(string) {
       var group = $gameTroop.aliveMembers();
       for (var i = 0; i < group.length; ++i) {
         var target = group[i];
-        if (target && target !== this._subject && target.isAppeared()) {
-          targets.push(target);
-        }
+        if (target && target !== this._subject) targets.push(target);
       }
       return targets;
     }
     if (string.match(/ACTOR[ ](\d+)/i)) {
       var target = $gameParty.battleMembers()[parseInt(RegExp.$1)];
-      if (target && target.isAppeared()) return [target];
+      if (target) return [target];
     }
     if (string.match(/ENEMY[ ](\d+)/i)) {
       var target = $gameTroop.members()[parseInt(RegExp.$1)];
-      if (target && target.isAppeared()) return [target];
+      if (target) return [target];
     }
     if (['FRIEND', 'FRIENDS', 'ALLIES'].contains(string)) {
       var group = this._action.friendsUnit().aliveMembers();
       for (var i = 0; i < group.length; ++i) {
         var target = group[i];
-        if (target && target.isAppeared()) targets.push(target);
+        if (target) targets.push(target);
       }
       return targets;
     }
@@ -2134,7 +2086,7 @@ BattleManager.makeActionTargets = function(string) {
       var group = this._action.friendsUnit().members();
       for (var i = 0; i < group.length; ++i) {
         var target = group[i];
-        if (target && target.isAppeared()) targets.push(target);
+        if (target) targets.push(target);
       }
       return targets;
     }
@@ -2142,7 +2094,7 @@ BattleManager.makeActionTargets = function(string) {
       var group = this._action.friendsUnit().deadMembers();
       for (var i = 0; i < group.length; ++i) {
         var target = group[i];
-        if (target && target.isAppeared()) targets.push(target);
+        if (target) targets.push(target);
       }
       return targets;
     }
@@ -2150,7 +2102,7 @@ BattleManager.makeActionTargets = function(string) {
       var group = this._action.opponentsUnit().aliveMembers();
       for (var i = 0; i < group.length; ++i) {
         var target = group[i];
-        if (target && target.isAppeared()) targets.push(target);
+        if (target) targets.push(target);
       }
       return targets;
     }
@@ -2158,7 +2110,7 @@ BattleManager.makeActionTargets = function(string) {
       var group = this._action.opponentsUnit().members();
       for (var i = 0; i < group.length; ++i) {
         var target = group[i];
-        if (target && target.isAppeared()) targets.push(target);
+        if (target) targets.push(target);
       }
       return targets;
     }
@@ -2175,26 +2127,24 @@ BattleManager.makeActionTargets = function(string) {
       var group = this._action.friendsUnit().aliveMembers();
       for (var i = 0; i < group.length; ++i) {
         var target = group[i];
-        if (target && target !== this._subject && target.isAppeared()) {
-          targets.push(target);
-        }
+        if (target && target !== this._subject) targets.push(target);
       }
       return targets;
     }
     if (string.match(/(?:FRIEND|ALLY)[ ](\d+)/i)) {
       var target = this._action.friendsUnit().members()[parseInt(RegExp.$1)];
-      if (target && target.isAppeared()) return [target];
+      if (target) return [target];
     }
     if (string.match(/(?:OPPONENT|FOE|RIVAL)[ ](\d+)/i)) {
       var target = this._action.opponentsUnit().members()[parseInt(RegExp.$1)]
-      if (target && target.isAppeared()) return [target];
+      if (target) return [target];
     }
     if (['ALL ALIVE'].contains(string)) {
       var group = this._action.friendsUnit().aliveMembers();
       group = group.concat(this._action.opponentsUnit().aliveMembers());
       for (var i = 0; i < group.length; ++i) {
         var target = group[i];
-        if (target && target.isAppeared()) targets.push(target);
+        if (target) targets.push(target);
       }
       return targets;
     }
@@ -2203,7 +2153,7 @@ BattleManager.makeActionTargets = function(string) {
       group = group.concat(this._action.opponentsUnit().members());
       for (var i = 0; i < group.length; ++i) {
         var target = group[i];
-        if (target && target.isAppeared()) targets.push(target);
+        if (target) targets.push(target);
       }
       return targets;
     }
@@ -2221,9 +2171,7 @@ BattleManager.makeActionTargets = function(string) {
       group = group.concat(this._action.opponentsUnit().aliveMembers());
       for (var i = 0; i < group.length; ++i) {
         var target = group[i];
-        if (target && target !== this._subject && target.isAppeared()) {
-          targets.push(target);
-        }
+        if (target && target !== this._subject) targets.push(target);
       }
       return targets;
     }
@@ -2231,7 +2179,7 @@ BattleManager.makeActionTargets = function(string) {
       var group = this._targets;
       for (var i = 0; i < group.length; ++i) {
         var target = group[i];
-        if (target && target.isAppeared()) targets.push(target);
+        if (target) targets.push(target);
       }
       if (!targets.contains(this._subject)) targets.push(this._subject);
       return targets;
@@ -2243,19 +2191,18 @@ BattleManager.makeActionTargets = function(string) {
         var target = group[i];
         if (target) {
           if (target === this._subject) continue;
-          if (target.isHidden()) continue;
           if (this._targets.contains(target)) continue;
 
           if (target.isDead()) {
-            if (Imported.YEP_X_AnimatedSVEnemies && target.isEnemy()) {
-              if (target.hasSVBattler() && !target.sideviewCollapse()) {
-                // Ignore
-              } else {
-                continue;
-              }
-            } else {
-              continue;
-            }
+          	if (Imported.YEP_X_AnimatedSVEnemies && target.isEnemy()) {
+          		if (target.hasSVBattler() && !target.sideviewCollapse()) {
+          			// Ignore
+          		} else {
+          			continue;
+          		}
+          	} else {
+          		continue;
+          	}
           }
 
           targets.push(target);
@@ -2395,7 +2342,7 @@ BattleManager.actionClearBattleLog = function() {
 };
 
 BattleManager.actionDeathBreak = function() {
-    if (this._subject.isDead()) {
+    if (this._subject.isDead() || this._subject.hp <= 0) {
       this._targets = [];
       this._actionList = [];
       this._individualTargets = [];
@@ -2504,22 +2451,6 @@ BattleManager.actionWaitForNewLine = function() {
 BattleManager.actionWaitForPopups = function() {
     this._logWindow.waitForPopups();
     return false;
-};
-
-//=============================================================================
-// SceneManager
-//=============================================================================
-
-Yanfly.BEC.SceneManager_snapForBackground = SceneManager.snapForBackground;
-SceneManager.snapForBackground = function() {
-    if ($gameParty.inBattle()) {
-      var spriteset = this._scene._spriteset;
-      if (spriteset.battleback1Name() === '' && 
-      spriteset.battleback2Name() === '') {
-        return;
-      }
-    }
-    Yanfly.BEC.SceneManager_snapForBackground.call(this);
 };
 
 //=============================================================================
@@ -2978,36 +2909,6 @@ Spriteset_Battle.prototype.isPopupPlaying = function() {
 //=============================================================================
 
 Game_Temp.prototype.clearActionSequenceSettings = function() {
-};
-
-Game_Temp.prototype.forceActionQueue = function(command) {
-  if (!this._forceActionQueue) {
-    this._forceActionQueue = JsonEx.makeDeepCopy($dataCommonEvents[1]);
-    this._forceActionQueue.list = [];
-  }
-  this._forceActionQueue.list.push(command);
-};
-
-Yanfly.BEC.Game_Temp_clearCommonEvent = Game_Temp.prototype.clearCommonEvent;
-Game_Temp.prototype.clearCommonEvent = function() {
-    this._forceActionQueue = undefined;
-    Yanfly.BEC.Game_Temp_clearCommonEvent.call(this);
-};
-
-Yanfly.BEC.Game_Temp_isCommonEventReserved =
-  Game_Temp.prototype.isCommonEventReserved;
-Game_Temp.prototype.isCommonEventReserved = function() {
-  if (this._forceActionQueue) return true;
-  return Yanfly.BEC.Game_Temp_isCommonEventReserved.call(this);
-};
-
-Yanfly.BEC.Game_Temp_reservedCommonEvent =
-  Game_Temp.prototype.reservedCommonEvent;
-Game_Temp.prototype.reservedCommonEvent = function() {
-  if (this._forceActionQueue) {
-    return this._forceActionQueue;
-  }
-  return Yanfly.BEC.Game_Temp_reservedCommonEvent.call(this);
 };
 
 //=============================================================================
@@ -4940,7 +4841,7 @@ Window_BattleLog.prototype.drawLineText = function(index) {
 };
 
 Window_BattleLog.prototype.textWidthEx = function(text) {
-    return this.drawTextEx(text, 0, this.contents.height + this.lineHeight());
+    return this.drawTextEx(text, 0, this.contents.height);
 };
 
 Window_BattleLog.prototype.drawCenterLine = function(index) {
@@ -4949,7 +4850,6 @@ Window_BattleLog.prototype.drawCenterLine = function(index) {
     this.contents.clearRect(rect.x, rect.y, rect.width, rect.height);
     var tw = this.textWidthEx(text);
     var wx = rect.x + (rect.width - tw) / 2;
-    this.resetFontSettings();
     this.drawTextEx(text, wx, rect.y);
 };
 

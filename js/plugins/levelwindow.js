@@ -70,6 +70,13 @@ $gameVariables.setValue(id,item.name)
     }
 };
 
+Window_BattleStatus.prototype.numVisibleRows = function() {
+    return 5;
+};
+
+Window_ActorCommand.prototype.numVisibleRows = function() {
+    return 5;
+};
 
 
 })();

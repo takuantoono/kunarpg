@@ -91,7 +91,7 @@
     //=====================================================    
     if (using_title) {
         Window_TitleCommand.prototype.lineHeight = function() {
-            return 72;
+            return 62;
         };    
     }
 

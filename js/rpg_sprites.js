@@ -2255,6 +2255,7 @@ Spriteset_Map.prototype.initialize = function() {
     Spriteset_Base.prototype.initialize.call(this);
 };
 
+
 Spriteset_Map.prototype.createLowerLayer = function() {
     Spriteset_Base.prototype.createLowerLayer.call(this);
     this.createParallax();
@@ -2264,6 +2265,7 @@ Spriteset_Map.prototype.createLowerLayer = function() {
     this.createDestination();
     this.createWeather();
 };
+
 
 Spriteset_Map.prototype.update = function() {
     Spriteset_Base.prototype.update.call(this);

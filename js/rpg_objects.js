@@ -3620,18 +3620,7 @@ Game_Actor.prototype.changeEquip = function(slotId, item) {
             (!item || this.equipSlots()[slotId] === item.etypeId)) {
         this._equips[slotId].setObject(item);
         this.refresh();
-if($gameActors.actor(1).row()==1){
-$gameActors.actor(1).setRow(2)
-$gameActors.actor(1).setRow(1)
-}
-if($gameActors.actor(1).row()==2){
-$gameActors.actor(1).setRow(1)
-$gameActors.actor(1).setRow(2)
-}
-if($gameActors.actor(1).row()==3){
-$gameActors.actor(1).setRow(1)
-$gameActors.actor(1).setRow(3)
-}
+
     }
 };
 
@@ -7612,14 +7601,24 @@ Game_Player.prototype.moveByInput = function() {
     if (!this.isMoving() && this.canMove()) {
         var direction = this.getInputDirection();
         if (direction > 0) {
+
             $gameTemp.clearDestination();
         } else if ($gameTemp.isDestinationValid()){
-            var x = $gameTemp.destinationX();
-            var y = $gameTemp.destinationY();
-            direction = this.findDirectionTo(x, y);
+        //    var x = $gameTemp.destinationX();
+        //    var y = $gameTemp.destinationY();
+        //    direction = this.findDirectionTo(x, y);
         }
-        if (direction > 0) {
-            this.executeMove(direction);
+        if (direction == 8) {
+            $gameSwitches.setValue(86,true)
+        }
+	if (direction == 2) {
+            $gameSwitches.setValue(85,true)
+        }
+        if (direction == 4) {
+            $gameSwitches.setValue(83,true)
+        }
+        if (direction == 6) {
+            $gameSwitches.setValue(84,true)
         }
     }
 };

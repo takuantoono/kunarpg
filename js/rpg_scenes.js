@@ -1,5 +1,5 @@
-//=============================================================================
-// rpg_scenes.js v1.2.0
+﻿//=============================================================================
+// rpg_scenes.js
 //=============================================================================
 
 //-----------------------------------------------------------------------------
@@ -513,7 +513,7 @@ Scene_Map.prototype.updateScene = function() {
         this.updateEncounter();
     }
     if (!SceneManager.isSceneChanging()) {
-        this.updateCallMenu();
+        //this.updateCallMenu();
     }
     if (!SceneManager.isSceneChanging()) {
         this.updateCallDebug();
@@ -1499,7 +1499,6 @@ Scene_Save.prototype.onSavefileOk = function() {
 
 Scene_Save.prototype.onSaveSuccess = function() {
     SoundManager.playSave();
-	StorageManager.cleanBackup(this.savefileId());
     this.popScene();
 };
 
