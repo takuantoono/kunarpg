@@ -212,6 +212,7 @@ Imported.TDDP_BindPicturesToMap = "1.0.7";
     // NEW
     Sprite_Picture.prototype.bltLoadedBitmap = function(sourceBitmap) {
         var picture = this.picture();
+if(picture==null) return;
         picture.setDimensions(sourceBitmap);
 
         // Check if bitmap size is too large
