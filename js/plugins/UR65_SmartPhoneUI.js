@@ -422,7 +422,7 @@
         };
 
         Window_ChoiceList.prototype.lineHeight = function() {
-            return 58;
+            return 54;
         };
 
         Window_ChoiceList.prototype.drawItem = function(index) {

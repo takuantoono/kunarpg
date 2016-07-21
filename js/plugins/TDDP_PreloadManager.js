@@ -130,36 +130,6 @@ TDDP.bootPreloadImages = {
       "myFile",
       "subfolder/myOtherFile"
     ]
-    picture: [
-      "textures/3d_castle_front"
-      "textures/3d_door_front"
-      "textures/3d_gate_front"
-      "textures/3d_gate_left"
-      "textures/3d_house_front"
-      "textures/3d_outside_base"
-      "textures/3d_house_left"
-      "textures/3d_wood_front"
-      "textures/3d_wood_left"
-      "textures/3d_backgroud"
-      "textures/3d_shop01_front"
-      "textures/3d_shop01_left"
-      "textures/3d_shop02_front"
-      "textures/3d_shop02_left"
-      "textures/3d_shop03_front"
-      "textures/3d_shop03_left"
-      "textures/3d_shop04_front"
-      "textures/3d_shop04_left"
-      "textures/3d_shop05_front"
-      "textures/3d_shop05_left"
-      "textures/3d_shop06_front"
-      "textures/3d_shop06_left"
-      "textures/3d_shop07_front"
-      "textures/3d_shop07_left"
-      "textures/3d_shop08_front"
-      "textures/3d_shop08_left"
-      "textures/3d_shop09_front"
-      "textures/3d_shop09_left"
-    ]
     */
 }
 /*
