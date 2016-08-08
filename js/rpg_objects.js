@@ -5143,6 +5143,7 @@ Game_Party.prototype.rateSurprise = function(troopAgi) {
     else {
         var rate = troopAgi / this.agility() / 10
     }
+    if($gameSwitches.value(104)) var rate = 1
     return rate;
 };
 
