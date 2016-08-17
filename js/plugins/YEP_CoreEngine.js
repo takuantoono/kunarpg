@@ -11,7 +11,7 @@ Yanfly.Core = Yanfly.Core || {};
 
 //=============================================================================
 /*:
- * @plugindesc v1.15 Needed for the majority of Yanfly Engine Scripts. Also
+ * @plugindesc v1.16 Needed for the majority of Yanfly Engine Scripts. Also
  * contains bug fixes found inherently in RPG Maker.
  * @author Yanfly Engine Plugins
  *
@@ -449,6 +449,12 @@ Yanfly.Core = Yanfly.Core || {};
  * ============================================================================
  * Changelog
  * ============================================================================
+ *
+ * Version 1.16:
+ * - Fixed a bug with RPG Maker MV's inherent 'drawTextEx' function. By default
+ * it calculates the text height and then resets the font settings before
+ * drawing the text, which makes the text height inconsistent if it were to
+ * match the calculated height settings.
  *
  * Version 1.15:
  * - Window's are now set to have only widths and heights of whole numbers. No
@@ -1297,6 +1303,21 @@ Window_Base._faceHeight  = Number(Yanfly.Parameters['Face Height'] || 144);
 
 Window_Base.prototype.lineHeight = function() {
   return Yanfly.Param.LineHeight;
+};
+
+Window_Base.prototype.drawTextEx = function(text, x, y) {
+  if (text) {
+    this.resetFontSettings();
+    var textState = { index: 0, x: x, y: y, left: x };
+    textState.text = this.convertEscapeCharacters(text);
+    textState.height = this.calcTextHeight(textState, false);
+    while (textState.index < textState.text.length) {
+      this.processCharacter(textState);
+    }
+    return textState.x - x;
+  } else {
+    return 0;
+  }
 };
 
 Window_Base.prototype.textWidthEx = function(text) {

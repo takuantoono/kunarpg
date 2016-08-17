@@ -31,6 +31,7 @@ var _Scene_Map_update = Scene_Map.prototype.update;
     Scene_Map.prototype.update = function() {
         _Scene_Map_update.call(this);
 if($gameSwitches.value(68)){
+
 this._InfoWindow.hide();
 if($gameSwitches.value(5)){
 	    this._InfoWindow2.hide();
@@ -52,8 +53,8 @@ if($gameSwitches.value(5)){
 var Scene_Map_callMenu = Scene_Map.prototype.callMenu;
 Scene_Map.prototype.callMenu = function() {
 Scene_Map_callMenu.call(this);
-Scene_Map._InfoWindow.hide();
-Scene_Map._InfoWindow2.hide();
+//Scene_Map._InfoWindow.hide();
+//Scene_Map._InfoWindow2.hide();
 };
 
 
