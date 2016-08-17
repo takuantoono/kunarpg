@@ -22,4 +22,8 @@ Window_MenuCommand.prototype.makeCommandList = function() {
     this.addGameEndCommand();
 };
 
+Window_BattleStatus.prototype.numVisibleRows = function() {
+    return 6;
+};
+
 })();

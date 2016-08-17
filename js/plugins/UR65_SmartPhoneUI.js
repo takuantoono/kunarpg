@@ -247,7 +247,12 @@
             this._enemies = [];
             var width = this.windowWidth();
             var height = this.windowHeight();
-            Window_Selectable.prototype.initialize.call(this, x, y -36, width, height);
+            var yy = 35
+	    if($gameSwitches.value(116)){
+            Window_Selectable.prototype.initialize.call(this, x, y , width, height)
+	    }else{
+            Window_Selectable.prototype.initialize.call(this, x, y - yy , width, height)
+	    }
             this.refresh();
             this.hide();
         };

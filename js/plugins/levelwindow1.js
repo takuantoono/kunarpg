@@ -26,9 +26,6 @@ Window_Selectable.prototype.select = function(index) {
     this.callUpdateHelp();
 };
 
-Window_MenuStatus.prototype.numVisibleRows = function() {
-    return 5;
-};
 
 
 

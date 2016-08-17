@@ -1,22 +1,6 @@
 ﻿(function() {
 
 
-
-Game_Party.prototype.swapOrder = function(index1, index2) {
-if(!$gameParty.members()[index1].isStateAffected(1)&&!$gameParty.members()[index2].isStateAffected(1)){
-    var temp = this._actors[index1];
-    this._actors[index1] = this._actors[index2];
-    this._actors[index2] = temp;
-if(index1!=index2){
-this.formationState(index1);
-this.formationState(index2);
-    $gamePlayer.refresh();
-}
-}
-};
-
-
-
 Game_Party.prototype.formationState = function(index) {
 
 $gameParty.members()[index].eraseState(65)
@@ -79,6 +63,24 @@ if(weapon1.note.match(/<(?:back)>/i)) condition = true;
 if(index==4&&!condition)$gameParty.members()[index].addNewState(71)
 
 }
+
+
+
+Game_Party.prototype.swapOrder = function(index1, index2) {
+if(!$gameParty.members()[index1].isStateAffected(1)&&!$gameParty.members()[index2].isStateAffected(1)){
+    var temp = this._actors[index1];
+    this._actors[index1] = this._actors[index2];
+    this._actors[index2] = temp;
+if(index1!=index2){
+this.formationState(index1);
+this.formationState(index2);
+    $gamePlayer.refresh();
+}
+}
+};
+
+
+
 
 
 })();
