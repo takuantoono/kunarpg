@@ -58,6 +58,6 @@ var $plugins =
 {"name":"TMTopFix","status":true,"description":"パーティの先頭にいるアクターの並び替えを禁止します。","parameters":{}},
 {"name":"TMCardItem","status":true,"description":"指定したアイテムをカードのように扇状に広げて表示します。\r\nカードの画像が別途必要になります。","parameters":{"maxCardCols":"11","cardSpacing":"0.095","arrowSpacing":"0.2","baseX":"408","baseY":"910","baseDistance":"408","shiftRadian":"0","selectedDistance":"472","cardSpeed":"24","cardSpeedR":"0.05","useHelpWindow":"1","helpWindowY":"0","showItemName":"1","numsFormat":"","blankMessage":"アイテムがありません。","useGoldWindow":"0","goldWindowX":"0","goldWindowY":"144","useWrap":"1","takeoverMainMenu":"0"}},
 {"name":"PictureAnimation","status":true,"description":"ピクチャのアニメーションプラグイン","parameters":{}},
-{"name":"SyncVariable","status":true,"description":"ユーザ間の変数同期プラグイン","parameters":{"ユーザID":"kunarpg","同期開始変数番号":"601","同期終了変数番号":"620","同期開始スイッチ番号":"0","同期終了スイッチ番号":"0","認証ファイル形式":"OFF"}},
+{"name":"SyncVariable","status":true,"description":"ユーザ間の変数同期プラグイン","parameters":{"ユーザID":"kunarpg","同期開始変数番号":"601","同期終了変数番号":"700","同期開始スイッチ番号":"0","同期終了スイッチ番号":"0","認証ファイル形式":"OFF"}},
 {"name":"VersionSpecified","status":true,"description":"【MMP ver.1.0】タイトル画面にバージョンを明記します。","parameters":{"version":"Version 0.6.83","fontSize":"20","fontColor":"rgb(255, 255, 255)","windowX":"220","windowY":"560"}}
 ];
