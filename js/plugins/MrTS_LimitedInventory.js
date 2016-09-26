@@ -135,7 +135,9 @@
 	var _Game_Party_initialize = Game_Party.prototype.initialize;
 	Game_Party.prototype.initialize = function() {
 		_Game_Party_initialize.call(this);
-		this._inventorySpace = paramDefaultLimit;
+		rim = paramDefaultLimit
+		rim = $gameVariables.value(707)
+		this._inventorySpace = rim;
 		this._modifiedInvSpace = 0;
 		this._ignoreInvLimit = false;
 	};
@@ -149,7 +151,8 @@
 	};
 
 	Game_Party.prototype.getInventorySpaceTotal = function() {
-		var base = this._inventorySpace;
+		//var base = this._inventorySpace;
+		var base = $gameVariables.value(707)
 		var mod = this._modifiedInvSpace;
 		var equipment = 0;
 		for (var i = 0; i < this.members().length; i++) {
@@ -248,7 +251,7 @@
 		this.contents.clear();
 		var u = $gameParty.getInventorySpaceUsed();
 		var t = $gameParty.getInventorySpaceTotal();
-		this.drawText(paramLimitText + " " + u + "/" + t, 0, 0);
+		this.drawText(paramLimitText + " " + u.toFixed(1) + "/" + t, 0, 0);
 	};
 
 	//--------------------------------------------------------------------------
@@ -271,6 +274,7 @@
 		var wy = this._itemWindow.y + this._itemWindow.height;
 		this._invLimitWindow = new Window_InventoryLimit(wx, wy, ww, wh);
 		this.addWindow(this._invLimitWindow);
+		
 	};
 
 	var _Scene_Item_useItem = Scene_Item.prototype.useItem;
@@ -278,6 +282,28 @@
 		_Scene_Item_useItem.call(this);
 		if (this._invLimitWindow) this._invLimitWindow.refresh();
 	};
+
+Scene_ItemBase.prototype.determineItem = function() {
+    var action = new Game_Action(this.user());
+    var item = this.item();
+    action.setItemObject(item);
+    if (action.isForFriend()) {
+        this.showSubWindow(this._actorWindow);
+        this._actorWindow.selectForItem(this.item());
+	if(this._invLimitWindow) this._invLimitWindow.hide();
+    } else {
+        this.useItem();
+        this.activateItemWindow();
+    }
+};
+
+
+Scene_ItemBase.prototype.onActorCancel = function() {
+    this.hideSubWindow(this._actorWindow);
+    if(this._invLimitWindow) this._invLimitWindow.show();
+};
+
+
 
 Scene_Shop.prototype.doBuyItem = function(number) {
     $gameParty.gainItem(this._item, number);

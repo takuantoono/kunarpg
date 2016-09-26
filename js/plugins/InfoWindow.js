@@ -18,9 +18,11 @@
 		Scene_map_start.call(this);
 	    this._InfoWindow = new Window_Info();
 	    this._InfoWindow2 = new Window_Info2();
+	    this._AutomapWindow = new Window_Automap();
 if($gameSwitches.value(79)){
 	    this.addWindow(this._InfoWindow);
 	    this.addWindow(this._InfoWindow2);
+	    this.addWindow(this._AutomapWindow);
 }
 
 	};
@@ -30,6 +32,15 @@ if($gameSwitches.value(79)){
 var _Scene_Map_update = Scene_Map.prototype.update;
     Scene_Map.prototype.update = function() {
         _Scene_Map_update.call(this);
+
+this._AutomapWindow.hide();
+if($gameSwitches.value(146)&&$gameSwitches.value(147)){
+this._AutomapWindow.show();
+        this._AutomapWindow.setText();
+}
+
+
+
 if($gameSwitches.value(68)){
 
 this._InfoWindow.hide();
@@ -37,6 +48,7 @@ if($gameSwitches.value(5)){
 	    this._InfoWindow2.hide();
 }else{
 	    this._InfoWindow2.show();
+        this._InfoWindow2.setText();
 }
 }else{
  this._InfoWindow2.hide();
@@ -44,18 +56,10 @@ if($gameSwitches.value(5)){
 	    this._InfoWindow.hide();
 }else{
 	    this._InfoWindow.show();
-}
-}
         this._InfoWindow.setText();
-        this._InfoWindow2.setText();
+}
+}
 
-
-var Scene_Map_callMenu = Scene_Map.prototype.callMenu;
-Scene_Map.prototype.callMenu = function() {
-Scene_Map_callMenu.call(this);
-//Scene_Map._InfoWindow.hide();
-//Scene_Map._InfoWindow2.hide();
-};
 
 
     };
@@ -305,6 +309,105 @@ this.changeTextColor(this.textColor(16));
 	};
 	// ウィンドウの色調
 	Window_Info2.prototype.updateTone = function() {
+    	this.setTone(64, 0, 128);
+	};
+
+
+function Window_Automap() {
+	    this.initialize.apply(this, arguments);
+	}
+
+	Window_Automap.prototype = Object.create(Window_Base.prototype);
+	Window_Automap.prototype.constructor = Window_Automap;
+	Window_Automap.prototype.initialize = function() {
+		var x = 150;
+		var y = 52;
+	    var width = 500;
+	    var height = this.lineHeight()*14-6;
+	    Window_Base.prototype.initialize.call(this, x, y, width, height);
+	};
+
+	Window_Automap.prototype.setText = function(str) {
+		this._text = str;
+		this.refresh();
+	};
+	
+	// ウィンドウに載せる内容
+	Window_Automap.prototype.refresh = function() {
+	    this.contents.clear();
+var x = 0
+var y = 0
+var id = 0
+for (var i = 0; i < 400; i++) {
+if($gameVariables.value(2)[i]=="Z"){
+x = i % 20
+y = i / 20
+x = Math.floor(x)
+y = Math.floor(y)
+xx = x * 24
+yy = y * 24
+id = $gameMap.tileId(x, y, 0)
+rid = $gameMap.regionId(x, y)
+if(id == 1569) this.drawIcon(320, xx + 3, yy + 3);
+if(id == 1577) this.drawIcon(321, xx + 3, yy + 3);
+if(id == 1570) this.drawIcon(322, xx + 3, yy + 3);
+if(id == 1578) this.drawIcon(323, xx + 3, yy + 3);
+if(id == 1579) this.drawIcon(324, xx + 3, yy + 3);
+if(id == 1571) this.drawIcon(325, xx + 3, yy + 3);
+if(id == 1580) this.drawIcon(326, xx + 3, yy + 3);
+if(id == 1581) this.drawIcon(327, xx + 3, yy + 3);
+if(id == 1583) this.drawIcon(328, xx + 3, yy + 3);
+if(id == 1582) this.drawIcon(329, xx + 3, yy + 3);
+if(id == 1584) this.drawIcon(330, xx + 3, yy + 3);
+if(id == 1585) this.drawIcon(331, xx + 3, yy + 3);
+if(id == 1586) this.drawIcon(332, xx + 3, yy + 3);
+if(id == 1587) this.drawIcon(333, xx + 3, yy + 3);
+if(id == 1576) this.drawIcon(334, xx + 3, yy + 3);
+if(id == 1552) this.drawIcon(335, xx + 3, yy + 3);
+
+idd = $gameMap.tileId(x-1, y, 0)
+if(idd==1578 || idd==1579 || idd==1581 || idd==1582 ||
+ idd==1584 || idd==1585 || idd==1587 || idd==1576) this.drawIcon(346, xx + 3, yy + 3);
+idd = $gameMap.tileId(x+1, y, 0)
+if(idd==1570 || idd==1579 || idd==1580 || idd==1583 ||
+ idd==1584 || idd==1585 || idd==1586 || idd==1576) this.drawIcon(346, xx + 24, yy + 3);
+idd = $gameMap.tileId(x, y-1, 0)
+if(idd==1577 || idd==1571 || idd==1582 || idd==1583 ||
+ idd==1585 || idd==1586 || idd==1587 || idd==1576) this.drawIcon(345, xx + 3, yy + 3);
+idd = $gameMap.tileId(x, y+1, 0)
+if(idd==1569 || idd==1571 || idd==1580 || idd==1581 ||
+ idd==1584 || idd==1586 || idd==1587 || idd==1576) this.drawIcon(345, xx + 3, yy + 24);
+
+if(rid == 15)this.drawIcon(336, xx + 3, yy + 3);
+
+if(x == $gamePlayer.x && y == $gamePlayer.y){
+if($gamePlayer._direction == 8)this.drawIcon(341, xx + 3, yy + 3);
+if($gamePlayer._direction == 2)this.drawIcon(342, xx + 3, yy + 3);
+if($gamePlayer._direction == 4)this.drawIcon(343, xx + 3, yy + 3);
+if($gamePlayer._direction == 6)this.drawIcon(344, xx + 3, yy + 3);
+
+}
+
+}
+}
+
+}
+
+
+	// フォントサイズ
+	Window_Automap.prototype.standardFontSize = function() {
+    	return 12;
+    };
+	// ウィンドウの透明度
+	Window_Automap.prototype.standardBackOpacity = function() {
+    	return 255;
+	};
+    // ウィンドウの余白
+	Window_Automap.prototype.standardPadding = function() {
+    	return 6;
+	};
+	// ウィンドウの色調
+	Window_Automap.prototype.updateTone = function() {
     	this.setTone(64, 0, 128);
 	};
 

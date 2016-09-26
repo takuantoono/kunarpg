@@ -526,6 +526,7 @@ VictorEngine.DualWield = VictorEngine.DualWield || {};
         var targets = this._dualWieldTargets.filter(function(target) {
             return target.isAlive();
         });
+	if(!this._action)return true
         return !this._isSecondAttack && this._action.isDualWield() && targets.length > 0;
     };
 
@@ -763,18 +764,6 @@ VictorEngine.DualWield = VictorEngine.DualWield || {};
             if (this.tradeItemWithParty(item, this.equips()[slotId])) {
                 this._equips[slotId].setObject(item);
                 this.refresh();
-if($gameActors.actor(1).row()==1){
-$gameActors.actor(1).setRow(2)
-$gameActors.actor(1).setRow(1)
-}
-if($gameActors.actor(1).row()==2){
-$gameActors.actor(1).setRow(1)
-$gameActors.actor(1).setRow(2)
-}
-if($gameActors.actor(1).row()==3){
-$gameActors.actor(1).setRow(1)
-$gameActors.actor(1).setRow(3)
-}
             }
         }
         changeEquip.call(this, slotId, item);

@@ -290,11 +290,10 @@
         if ($gameSystem.isSideView()) {
             bitmap = ImageManager.loadSvEnemy(name, hue);
         } else {
-            //bitmap = ImageManager.loadEnemy(name, hue);
-bitmap = ImageManager.loadSvEnemy(name, hue);
+            bitmap = ImageManager.loadEnemy(name, hue);
         }
         this._enemySprite.bitmap = bitmap;
-
+this.contents.fontSize = 24
         this.resetTextColor();
         this.drawText(enemy.name, x, y);
 
@@ -306,7 +305,7 @@ bitmap = ImageManager.loadSvEnemy(name, hue);
             this.drawText(TextManager.param(i), x, y, 160);
             this.resetTextColor();
             this.drawText(enemy.params[i], x + 160, y, 60, 'right');
-            y += lineHeight;
+            y += lineHeight - 2;
         }
 
         var rewardsWidth = 280;
@@ -340,9 +339,10 @@ bitmap = ImageManager.loadSvEnemy(name, hue);
 
         var descWidth = 480;
         x = this.contents.width - descWidth;
-        y = this.textPadding() + lineHeight * 7;
-        this.drawTextEx(enemy.meta.desc1, x, y + lineHeight * 0, descWidth);
-        this.drawTextEx(enemy.meta.desc2, x, y + lineHeight * 1, descWidth);
+        y = this.textPadding() + lineHeight * 7 - 12;
+this.contents.fontSize = 24
+        this.drawText(enemy.meta.desc1, x, y);
+        this.drawText(enemy.meta.desc2, x, y + lineHeight * 1, descWidth);
     };
 
 })();
